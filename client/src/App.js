@@ -1,26 +1,27 @@
-import {useEffect, useRef} from 'react';
-import { io } from 'socket.io-client';
+import { useEffect } from 'react';
+import io from 'socket.io-client';
 import './App.css';
 
 function App() {
-  const socket = useRef();
-
-  useEffect(() => {
-    socket.current = io("ws://localhost:9013");
-
-    socket.current.on("connection", () => {
-      console.log('Connected to server')
-    })
-  }, []);
+  const socket = io.connect("http://localhost:9013")
 
   const handleClick = () => {
-    socket.current.emit("message", new Date().getTime());
+    socket.emit('sendMessage', {message: "hello"})
+
   }
+
+  useEffect(() => {
+    socket.on("receiveMessage", (data) => {
+      alert(data.message)
+    })
+  }, [socket])
 
   return (
     <div className='App'>
       <p>Socket.io app</p>
-
+      <div>
+        
+      </div>
       <button type="button" onClick={handleClick}>
         Emit
       </button>
