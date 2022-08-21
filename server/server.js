@@ -32,11 +32,6 @@ const socketIOMiddleware = (req, res, next) => {
 app.use(cors());
 
 
-app.use('/api/v1/hello', socketIOMiddleware, (req, res) => {
-    req.io.emit('message', `Hello, ${req.originalUrl}`);
-    res.send('hello world!');
-})
-
 // listen
 const port = process.env.PORT || 8000;
 httpServer.listen(port, () => {
