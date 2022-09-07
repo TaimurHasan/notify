@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const Room = ({ socket }) => {
 
 
   const [message, setMessage] = useState(""); 
-  const [messageReceived, setMessageReceived] = useState("");
+  const [messageReceived, setMessageReceived] = useState([]);
 
   const handleClick = () => {
     // set room state
@@ -15,10 +16,11 @@ const Room = ({ socket }) => {
   useEffect(() => {
     
     socket.on("receiveMessage", (data) => {
-      setMessageReceived({ 
+      setMessageReceived(current => [...current, {
+        key: uuidv4(),
         message: data.message,
         username: data.username
-    });
+      }]);
     })
   }, [socket])
 
@@ -34,7 +36,7 @@ const Room = ({ socket }) => {
             Send
           </button>
         </form>
-        {messageReceived && <p> {messageReceived.message} from {messageReceived.username} </p>}
+        {messageReceived.length && messageReceived.map((currentMessage) => (<p key={currentMessage.key}> {currentMessage.message} from {currentMessage.username} </p>))}
       </div>
   );
 }

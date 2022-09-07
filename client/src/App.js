@@ -1,6 +1,5 @@
 import './App.css';
 import Login from './components/Login';
-import Room from './Pages/Room';
 
 function App() {
 
